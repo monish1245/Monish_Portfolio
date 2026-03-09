@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Monish D P — Data Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#050810;
+  --bg2:#0C1120;
+  --teal:#00D4C8;
+  --teal2:#00F5E9;
+  --tealDim:rgba(0,212,200,.12);
+  --cream:#EEF2FF;
+  --mid:#8892B0;
+  --card:#0D1526;
+  --border:rgba(0,212,200,.12);
+  --white:#FFFFFF;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+.cursor{position:fixed;width:8px;height:8px;background:var(--teal);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .12s ease;mix-blend-mode:difference}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid var(--teal);border-radius:50%;pointer-events:none;z-index:9998;transition:all .28s ease;opacity:.45}
+
+/* NOISE OVERLAY */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.6;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:20px 72px;
+  background:rgba(5,8,16,.88);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--teal);letter-spacing:.1em}
+.nav-links{display:flex;gap:36px}
+.nav-links a{font-size:.76rem;font-weight:500;color:var(--mid);text-decoration:none;letter-spacing:.14em;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover{color:var(--teal)}
+
+/* HERO */
+#hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:140px 72px 100px;
+  position:relative;overflow:hidden;
+}
+/* big glow blob */
+#hero::after{
+  content:'';position:absolute;
+  width:700px;height:700px;
+  background:radial-gradient(circle,rgba(0,212,200,.07) 0%,transparent 70%);
+  top:-100px;right:-100px;pointer-events:none;
+}
+.hero-row{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:1200px;margin:0 auto;width:100%}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;
+  color:var(--teal);letter-spacing:.18em;text-transform:uppercase;
+  margin-bottom:28px;
+  animation:fadeUp .7s ease both;
+}
+.hero-eyebrow span{width:28px;height:1px;background:var(--teal);display:inline-block}
+
+h1{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(3.8rem,6vw,6rem);
+  line-height:.92;color:var(--white);letter-spacing:-.03em;
+  animation:fadeUp .7s .08s ease both;
+}
+h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--teal),var(--teal2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.tagline{
+  margin-top:28px;font-size:1rem;color:var(--mid);
+  line-height:1.8;font-weight:300;
+  animation:fadeUp .7s .16s ease both;
+}
+.tagline strong{color:var(--cream);font-weight:500}
+
+.chips{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;
+  animation:fadeUp .7s .24s ease both;
+}
+.chip{
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  padding:5px 12px;border-radius:4px;
+  background:var(--tealDim);
+  border:1px solid rgba(0,212,200,.2);
+  color:var(--teal2);
+}
+
+.cta{display:flex;gap:14px;margin-top:40px;animation:fadeUp .7s .32s ease both}
+.btn-p{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--teal);color:#050810;
+  padding:13px 28px;border-radius:6px;
+  font-weight:700;font-size:.85rem;text-decoration:none;
+  transition:all .2s;letter-spacing:.04em;
+}
+.btn-p:hover{background:var(--teal2);transform:translateY(-2px);box-shadow:0 14px 40px rgba(0,212,200,.2)}
+.btn-g{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(0,212,200,.3);color:var(--teal);
+  padding:13px 28px;border-radius:6px;
+  font-weight:500;font-size:.85rem;text-decoration:none;
+  transition:all .2s;
+}
+.btn-g:hover{background:var(--tealDim);transform:translateY(-2px)}
+
+/* RIGHT STATS PANEL */
+.stats-panel{animation:fadeUp .7s .1s ease both}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.stat-box{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:24px 20px;
+  transition:border-color .3s;
+}
+.stat-box:hover{border-color:rgba(0,212,200,.35)}
+.stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:2.2rem;color:var(--teal);line-height:1}
+.stat-lbl{font-size:.72rem;color:var(--mid);margin-top:6px;font-family:'JetBrains Mono',monospace}
+.stack-box{
+  margin-top:16px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:20px;
+}
+.stack-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--teal);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+.stack-chips{display:flex;flex-wrap:wrap;gap:8px}
+.sc{
+  font-family:'JetBrains Mono',monospace;font-size:.64rem;
+  padding:4px 10px;border-radius:4px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  color:var(--cream);
+}
+
+/* DIVIDER */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);max-width:1200px;margin:0 auto}
+
+/* SECTIONS */
+.sw{padding:96px 72px;max-width:1200px;margin:0 auto}
+.eyebrow{
+  display:flex;align-items:center;gap:12px;
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  color:var(--teal);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;
+}
+.eyebrow::before{content:'';width:24px;height:1px;background:var(--teal)}
+.sec-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,4vw,2.8rem);color:var(--white);line-height:1.05;margin-bottom:52px}
+
+/* EXPERIENCE */
+.exp-wrap{display:flex;flex-direction:column;gap:0}
+.exp-item{
+  display:grid;grid-template-columns:200px 1fr;gap:48px;
+  padding:44px 0;border-bottom:1px solid rgba(255,255,255,.05);
+  opacity:0;transform:translateY(22px);transition:all .55s ease;
+}
+.exp-item.vis{opacity:1;transform:none}
+.ep{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--teal);margin-bottom:6px}
+.ec{font-size:.82rem;color:var(--mid);font-weight:300;line-height:1.55}
+.er{font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;color:var(--white);margin-bottom:4px}
+.ecl{font-size:.74rem;color:var(--teal);font-family:'JetBrains Mono',monospace;margin-bottom:18px;opacity:.85}
+.ep-pts{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ep-pts li{padding-left:18px;position:relative;font-size:.87rem;color:var(--mid);line-height:1.65;font-weight:300}
+.ep-pts li::before{content:'▸';position:absolute;left:0;color:var(--teal);font-size:.75rem;top:2px}
+.ep-pts li strong{color:var(--cream);font-weight:500}
+
+/* PROJECTS */
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.pc{
+  background:var(--card);border:1px solid rgba(255,255,255,.05);
+  border-radius:14px;padding:26px;
+  text-decoration:none;display:block;
+  opacity:0;transform:translateY(22px);
+  transition:opacity .55s ease,transform .55s ease,border-color .25s,box-shadow .25s;
+}
+.pc.vis{opacity:1;transform:none}
+.pc:hover{border-color:rgba(0,212,200,.22);transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.pi{font-size:1.5rem;margin-bottom:14px}
+.pt{font-family:'Syne',sans-serif;font-weight:700;font-size:.98rem;color:var(--white);margin-bottom:10px;line-height:1.3}
+.pd{font-size:.82rem;color:var(--mid);line-height:1.65;font-weight:300;margin-bottom:16px}
+.ptags{display:flex;flex-wrap:wrap;gap:6px}
+.ptag{font-family:'JetBrains Mono',monospace;font-size:.61rem;padding:3px 8px;border-radius:3px;background:var(--tealDim);color:var(--teal2);border:1px solid rgba(0,212,200,.15)}
+.plink{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;color:var(--teal);margin-top:14px;font-weight:500}
+
+/* SKILLS */
+.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.sb{
+  background:var(--card);border:1px solid rgba(255,255,255,.05);
+  border-radius:14px;padding:26px;
+  opacity:0;transform:translateY(18px);transition:all .5s ease;
+}
+.sb.vis{opacity:1;transform:none}
+.sbt{font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;color:var(--teal);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font-size:.78rem;padding:5px 13px;border-radius:100px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:var(--cream)}
+
+/* PUBLICATION */
+.pub{
+  background:linear-gradient(135deg,rgba(0,212,200,.07),transparent 60%);
+  border:1px solid rgba(0,212,200,.18);border-radius:18px;padding:44px;
+  display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;
+  opacity:0;transform:translateY(22px);transition:all .55s ease;
+}
+.pub.vis{opacity:1;transform:none}
+.pub-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,212,200,.1);border:1px solid rgba(0,212,200,.22);
+  border-radius:100px;padding:5px 14px;margin-bottom:16px;
+  font-size:.68rem;font-family:'JetBrains Mono',monospace;color:var(--teal);
+}
+.pub-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.35rem;color:var(--white);line-height:1.25;margin-bottom:14px}
+.pub-meta{font-size:.83rem;color:var(--mid);line-height:1.75;font-weight:300}
+.pub-meta strong{color:var(--cream);font-weight:500}
+.pub-btn{
+  display:inline-flex;flex-direction:column;align-items:center;gap:5px;
+  background:var(--teal);color:#050810;
+  padding:20px 30px;border-radius:12px;text-decoration:none;
+  font-weight:700;font-size:.92rem;transition:all .2s;white-space:nowrap;
+}
+.pub-btn:hover{background:var(--teal2);transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,212,200,.22)}
+.pub-btn span{font-size:.63rem;font-family:'JetBrains Mono',monospace;opacity:.75;font-weight:400}
+
+/* CONTACT */
+#contact{padding:120px 72px;text-align:center;max-width:820px;margin:0 auto}
+.ct{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.8rem,5vw,4.2rem);color:var(--white);line-height:.95;margin-bottom:22px}
+.ct em{font-style:normal;background:linear-gradient(135deg,var(--teal),var(--teal2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.csub{color:var(--mid);font-size:.95rem;line-height:1.8;margin-bottom:48px;font-weight:300}
+.clinks{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+.cl{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:13px 22px;border-radius:8px;text-decoration:none;
+  font-size:.84rem;font-weight:500;
+  border:1px solid rgba(255,255,255,.07);color:var(--cream);
+  background:rgba(255,255,255,.02);transition:all .2s;
+}
+.cl:hover{border-color:rgba(0,212,200,.3);color:var(--teal);background:var(--tealDim);transform:translateY(-3px)}
+.cl svg{width:16px;height:16px;flex-shrink:0}
+
+footer{text-align:center;padding:28px 72px;border-top:1px solid rgba(255,255,255,.05);font-size:.72rem;color:var(--mid);font-family:'JetBrains Mono',monospace}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:#22D3A4;display:inline-block;animation:pulse2 2s infinite;margin-right:6px}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--teal);border-radius:2px}
+
+@media(max-width:940px){
+  nav{padding:16px 24px}
+  .nav-links{display:none}
+  #hero{padding:100px 24px 60px}
+  .hero-row{grid-template-columns:1fr}
+  .sw{padding:60px 24px}
+  .pg{grid-template-columns:1fr}
+  .sg{grid-template-columns:1fr}
+  .exp-item{grid-template-columns:1fr}
+  .pub{grid-template-columns:1fr}
+  #contact{padding:60px 24px}
+  footer{padding:24px}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">MDP</div>
+  <div class="nav-links">
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#publication">Research</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-row">
+    <!-- LEFT -->
+    <div>
+      <div class="hero-eyebrow"><span></span>Data Engineer · Chennai, India</div>
+      <h1>Monish<br/><em>D P.</em></h1>
+      <p class="tagline">
+        <strong>10 months</strong> building production ETL pipelines<br/>
+        for <strong>Kioxia America, Inc.</strong> (San Jose, CA).<br/>
+        <strong>12 ETL workflows · Springer Published · 8.3 CGPA</strong>
+      </p>
+      <div class="chips">
+        <span class="chip">Talend Open Studio</span>
+        <span class="chip">Azure Data Factory</span>
+        <span class="chip">SSIS</span>
+        <span class="chip">Python · SQL</span>
+        <span class="chip">Power BI</span>
+        <span class="chip">MySQL · PostgreSQL</span>
+      </div>
+      <div class="cta">
+        <a href="https://github.com/monish1245" target="_blank" class="btn-p">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub Portfolio
+        </a>
+        <a href="#contact" class="btn-g">Let's Connect</a>
+      </div>
+    </div>
+    <!-- RIGHT STATS -->
+    <div class="stats-panel">
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-num">12</div>
+          <div class="stat-lbl">ETL Workflows Built</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">10<span style="font-size:1rem">mo</span></div>
+          <div class="stat-lbl">Production Experience</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">400+</div>
+          <div class="stat-lbl">Records Processed</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">8.3</div>
+          <div class="stat-lbl">CGPA · B.E. CSE</div>
+        </div>
+      </div>
+      <div class="stack-box">
+        <div class="stack-title">Core Tech Stack</div>
+        <div class="stack-chips">
+          <span class="sc">Talend</span><span class="sc">Azure ADF</span>
+          <span class="sc">SSIS</span><span class="sc">Python</span>
+          <span class="sc">SQL</span><span class="sc">Power BI</span>
+          <span class="sc">MySQL</span><span class="sc">PostgreSQL</span>
+          <span class="sc">Git</span><span class="sc">Jupyter</span>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#22D3A4">
+        <span class="pulse-dot"></span> Open to opportunities · Immediate joiner
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+<div class="sw">
+  <div class="eyebrow">Where I've worked</div>
+  <h2 class="sec-title">Experience</h2>
+  <div class="exp-wrap">
+    <div class="exp-item ra">
+      <div>
+        <div class="ep">Feb 2025 – Dec 2025</div>
+        <div class="ec">Gaininsight Solutions Pvt Ltd<br/>Chennai, India</div>
+      </div>
+      <div>
+        <div class="er">Data Engineer Intern</div>
+        <div class="ecl">// Client: Kioxia America, Inc. — San Jose, California</div>
+        <ul class="ep-pts">
+          <li>Built <strong>12 end-to-end Talend ETL workflows</strong> — ingestion, cleaning, enrichment, deduplication, incremental load, and Power BI dashboard preparation for Kioxia America.</li>
+          <li>Automated daily ingestion from <strong>5+ source files</strong> into MySQL/PostgreSQL via Azure Data Factory — eliminating all manual data handling.</li>
+          <li>Designed Incremental Load pipeline reducing redundant processing by <strong>~40%</strong> and preventing duplicate inserts entirely.</li>
+          <li>Built real-time new-hire alerts using <strong>Talend ESB</strong> (tSendMail + tRestClient) — automated email + API notifications.</li>
+          <li>Performed deduplication on <strong>400+ employee records</strong> using tUniqRow — zero-error schema mapping achieved.</li>
+          <li>Authored comprehensive <strong>28-page SOP document</strong> covering all 12 workflows — published on GitHub.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+<div class="sw">
+  <div class="eyebrow">What I've built</div>
+  <h2 class="sec-title">Projects</h2>
+  <div class="pg">
+    <a href="https://github.com/monish1245/talend-hr-etl-pipeline" target="_blank" class="pc ra">
+      <div class="pi">⚙️</div>
+      <div class="pt">Talend HR ETL — 12 Production Workflows</div>
+      <div class="pd">End-to-end ETL pipeline system for Kioxia America. Full HR data lifecycle: ingestion, cleaning, enrichment, deduplication, incremental load, BI-ready output.</div>
+      <div class="ptags"><span class="ptag">Talend</span><span class="ptag">MySQL</span><span class="ptag">PostgreSQL</span><span class="ptag">Power BI</span><span class="ptag">SSIS</span></div>
+      <div class="plink">View on GitHub →</div>
+    </a>
+    <a href="https://github.com/monish1245/azure-data-pipeline-kioxia" target="_blank" class="pc ra" style="transition-delay:.1s">
+      <div class="pi">☁️</div>
+      <div class="pt">Azure Data Pipeline — Kioxia America</div>
+      <div class="pd">Automated daily ingestion of Kioxia America's sales and product master data using Azure Data Factory — zero manual intervention, structured Azure SQL output.</div>
+      <div class="ptags"><span class="ptag">Azure ADF</span><span class="ptag">Azure SQL</span><span class="ptag">Blob Storage</span><span class="ptag">Python</span></div>
+      <div class="plink">View on GitHub →</div>
+    </a>
+    <a href="https://github.com/monish1245/python-data-engineering" target="_blank" class="pc ra" style="transition-delay:.2s">
+      <div class="pi">🐍</div>
+      <div class="pt">Python Data Engineering Scripts</div>
+      <div class="pd">Production-grade Python utilities: HR data cleaning, deduplication, attrition analysis, attendance rate flagging — mirrors all 12 Talend workflows programmatically.</div>
+      <div class="ptags"><span class="ptag">Python</span><span class="ptag">Pandas</span><span class="ptag">NumPy</span><span class="ptag">ETL</span></div>
+      <div class="plink">View on GitHub →</div>
+    </a>
+    <a href="https://link.springer.com/chapter/10.1007/978-981-96-8796-1_15" target="_blank" class="pc ra" style="transition-delay:.3s">
+      <div class="pi">🚄</div>
+      <div class="pt">Railway Track Obstacle Detection — Deep Learning</div>
+      <div class="pd">Real-time obstacle detection using deep learning + sensor arrays. Selected globally — Springer Nature published, presented at ICTIS 2025 international conference, Thailand.</div>
+      <div class="ptags"><span class="ptag">Deep Learning</span><span class="ptag">Python</span><span class="ptag">IoT</span><span class="ptag">Springer</span></div>
+      <div class="plink">Read Paper →</div>
+    </a>
+    <a href="https://github.com/monish1245" target="_blank" class="pc ra" style="transition-delay:.4s">
+      <div class="pi">📊</div>
+      <div class="pt">SQL HR Analytics — 12 Production Queries</div>
+      <div class="pd">Advanced SQL scripts: headcount by dept, attrition rate, salary bands, attendance flagging, duplicate detection, incremental watermark queries, Power BI-ready views.</div>
+      <div class="ptags"><span class="ptag">MySQL</span><span class="ptag">PostgreSQL</span><span class="ptag">Window Fn</span><span class="ptag">CTEs</span></div>
+      <div class="plink">View on GitHub →</div>
+    </a>
+    <div class="pc ra" style="transition-delay:.5s;border-style:dashed;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:200px">
+      <div style="font-size:2rem;margin-bottom:12px">🎯</div>
+      <div class="pt">Microsoft DP-900</div>
+      <div class="pd" style="margin:0">Azure Data Fundamentals Certification<br/>In Progress · Target Q2 2026</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+<div class="sw">
+  <div class="eyebrow">What I work with</div>
+  <h2 class="sec-title">Skills</h2>
+  <div class="sg">
+    <div class="sb ra">
+      <div class="sbt">ETL & Integration</div>
+      <div class="pills"><span class="pill">Talend Open Studio</span><span class="pill">SSIS</span><span class="pill">Azure Data Factory</span><span class="pill">tMap</span><span class="pill">tAggregateRow</span><span class="pill">tUniqRow</span><span class="pill">tSendMail</span><span class="pill">Talend ESB</span></div>
+    </div>
+    <div class="sb ra" style="transition-delay:.1s">
+      <div class="sbt">Databases & SQL</div>
+      <div class="pills"><span class="pill">MySQL</span><span class="pill">PostgreSQL</span><span class="pill">SQL Server</span><span class="pill">Window Functions</span><span class="pill">CTEs</span><span class="pill">Subqueries</span><span class="pill">JOINs</span></div>
+    </div>
+    <div class="sb ra" style="transition-delay:.2s">
+      <div class="sbt">Cloud & BI</div>
+      <div class="pills"><span class="pill">Microsoft Azure</span><span class="pill">Azure ADF</span><span class="pill">Azure Blob Storage</span><span class="pill">Azure SQL</span><span class="pill">Power BI</span><span class="pill">Qlik Sense</span></div>
+    </div>
+    <div class="sb ra" style="transition-delay:.3s">
+      <div class="sbt">Languages & Tools</div>
+      <div class="pills"><span class="pill">Python</span><span class="pill">Pandas</span><span class="pill">NumPy</span><span class="pill">SQL (Advanced)</span><span class="pill">Java</span><span class="pill">Git</span><span class="pill">GitHub</span><span class="pill">Jupyter</span><span class="pill">German 🇩🇪</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PUBLICATION -->
+<section id="publication">
+<div class="sw">
+  <div class="eyebrow">Research</div>
+  <h2 class="sec-title">Publication</h2>
+  <div class="pub ra">
+    <div>
+      <div class="pub-badge">📖 Springer Nature · ICTIS 2025 · LNNS Vol.1511 · pp 167–177</div>
+      <div class="pub-title">Railway Track Obstacle Detection and Alert System Using Deep Learning</div>
+      <div class="pub-meta">
+        <strong>First Online:</strong> 16 November 2025 &nbsp;·&nbsp; <strong>DOI:</strong> 10.1007/978-981-96-8796-1_15<br/>
+        <strong>Authors:</strong> R. Anand, D.P. Monish, D. Madhukar, C.G. Paari<br/><br/>
+        Presented at the <strong>International Conference on ICT for Intelligent Systems (ICTIS 2025)</strong>, Thailand. Selected from a global pool of research submissions. Deep Learning-based embedded system for real-time obstacle detection on railway tracks using sensor arrays and automated alert mechanisms.
+      </div>
+    </div>
+    <div>
+      <a href="https://link.springer.com/chapter/10.1007/978-981-96-8796-1_15" target="_blank" class="pub-btn">
+        Read Paper
+        <span>link.springer.com</span>
+      </a>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="eyebrow" style="justify-content:center">Get in touch</div>
+  <div class="ct">Let's <em>work</em><br/>together.</div>
+  <p class="csub">Looking for Data Engineer / ETL Developer roles.<br/>Open to Chennai · Remote · Pan-India opportunities.</p>
+  <div class="clinks">
+    <a href="mailto:dpmonish77@gmail.com" class="cl">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+      dpmonish77@gmail.com
+    </a>
+    <a href="https://linkedin.com/in/monish-d-p-21b792279" target="_blank" class="cl">
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      LinkedIn
+    </a>
+    <a href="https://github.com/monish1245" target="_blank" class="cl">
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      github.com/monish1245
+    </a>
+    <a href="tel:+919345315933" class="cl">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+      +91-9345315933
+    </a>
+  </div>
+</section>
+
+<footer>© 2025 Monish D P · Data Engineer · Chennai, India · Built with passion 🚀</footer>
+
+<script>
+// Cursor
+const cur=document.getElementById('cur'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px'});
+(function a(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx-16+'px';ring.style.top=ry-16+'px';requestAnimationFrame(a)})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='scale(3)';ring.style.transform='scale(1.5)'});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='scale(1)';ring.style.transform='scale(1)'});
+});
+
+// Scroll reveal
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')}),{threshold:.12});
+document.querySelectorAll('.ra,.exp-item,.sb,.pub,.pc').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
